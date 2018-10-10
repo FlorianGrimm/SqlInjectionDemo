@@ -1,0 +1,134 @@
+﻿@page
+@model useparameterModel
+@{
+    ViewData["Title"] = "@parameter";
+}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="60000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <div class="img-responsive">
+                <p>
+                    Try the examples like in the sql-injection version.<br/>
+                </p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="img-responsive">
+                <p>
+                    You see the SQLCode, that is executed, on the right.
+                    <br />
+                    Search for: <code>Charles</code><br />
+                    Search for: <code>Babbage's</code><br />
+                    Search for: <code>''s</code><br />
+                    <br />
+                    Do you see the no error. No problem.
+                </p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="img-responsive">
+                <p>
+                    Let's search for last names starting with B:<br />
+                    <code>%Z' UNION SELECT Name, Description FROM dbo.persons WHERE Name like '% B%' --</code><br />
+
+                    <br />
+                    Let's display the tables in the database:<br />
+                    <code>%Z' UNION SELECT SCHEMA_NAME(schema_id), name from sys.tables --</code><br />
+
+                    <br />
+                    Too bad nothing works.<br />
+                </p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="img-responsive">
+                <p>
+                    Now it's up to you add your name to the persons.<br />
+                    <br />
+                    No chance<br />
+                </p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="img-responsive">
+                <p>
+                    Now repeat loud: I will never ever concat string to SQL Code.<br />
+                    <br />
+                    Happy coding<br />
+                </p>
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Search persons</h2>
+        <form method="post">
+            Filter for description <input name="filter" type="text" maxlength="255" placeholder="filter for description." />
+            <input name="Search" type="submit" />
+        </form>
+        <h2>The search results:</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                @{
+                    foreach (var p in this.Model.persons) {
+                        <tr>
+                            <td>@p.Name</td>
+                            <td>@p.Description</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h2>Spoiler - the code that is executed.</h2>
+        <code>
+            @this.Model.sqlcode
+        </code>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>This may help you to understand what going on...</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Breakout of strings</h2>
+        <ul>
+            <li> <code>&apos;%filter%&apos;</code>  is a string in SQL.</li>
+            <li> <code>&apos;%Z&apos; --filter%&apos;</code></li>
+            <li> -- is a comment.</li>
+            <li> in this data no description starts with an Z.</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>append / concat two results</h2>
+        <ul>
+            <li><code>SELECT .... UNION ALL SELECT ....</code> returns the result of the first select and the second select.</li>
+            <li><code>SELECT ... (With no results) UNION  SELECT ....</code> returns the result of the the second select, because the first return nothing.</li>
+        </ul>
+    </div>
+</div>
