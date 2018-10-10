@@ -45,7 +45,10 @@ namespace SqlInjectionDemoWebApplication {
 
             app.UseMvc();
 
-            ConnectionString = this.Configuration.GetConnectionString("SQL");
+            try {
+                ConnectionString = this.Configuration.GetConnectionString("SQL");
+            } catch (System.Exception) {
+            }
         }
     }
 }
