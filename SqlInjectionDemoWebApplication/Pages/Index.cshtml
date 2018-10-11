@@ -6,62 +6,87 @@
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="60000">
     <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-        <li data-target="#myCarousel" data-slide-to="4"></li>
+        <li data-target="#myCarousel" data-slide-to="0" class="@((this.Model.carousel=="0") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="1" class="@((this.Model.carousel=="1") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="2" class="@((this.Model.carousel=="2") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="3" class="@((this.Model.carousel=="3") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="4" class="@((this.Model.carousel=="4") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="5" class="@((this.Model.carousel=="5") ? "active" : "")"></li>
+        <li data-target="#myCarousel" data-slide-to="6" class="@((this.Model.carousel=="6") ? "active" : "")"></li>
     </ol>
     <div class="carousel-inner" role="listbox">
-        <div class="item active">
+        <div class="item @((this.Model.carousel=="0") ? "active" : "")">
             <div class="img-responsive">
                 <p>
-                    Be the power of @@ with you.<br />
-                    Wanna see why?<br />
-                    What happens if you concat strings to build an sql code?<br>
-                    Let's hack this.<br />
+                    Concat strings to build a SQL Code is a risky thing.<br />
+                    A possible attack doing is called &quot;SQL Injection&quot;.<br />
+                    I try do give you an idea what you can do if something like this is used.<br />
+                    Let's hack.<br />
                     Goto the next pages and copy the <code>text</code> to the search box.
                 </p>
             </div>
         </div>
-        <div class="item">
+        <div class="item @((this.Model.carousel=="1") ? "active" : "")">
             <div class="img-responsive">
                 <p>
-                    You see the SQLCode, that is executed, on the right.
-                    <br />
+                    You see the SQLCode, that is executed, on the right.<br />
                     Search for: <code>Charles</code><br />
-                    Search for: <code>Babbage's</code><br />
-                    Search for: <code>''s</code><br />
                     <br />
-                    You see the error, that's the problem. Let's make it to a bigger problem.
+                    The result contains all persons that contains Charles in the description.<br />
+                    Try something else if you want - then continue.
                 </p>
             </div>
         </div>
-        <div class="item">
+        <div class="item @((this.Model.carousel=="2") ? "active" : "")">
+            <div class="img-responsive">
+                <p>
+                    Search for: <code>Babbage's</code><br />
+                    You see an error...<br />
+                    <br />
+                    Search for: <code>''s</code><br />
+                    That works, do you know why?<br />
+                    <br />
+                    You saw the error, that's the problem. Let's make it to a really big problem.
+                </p>
+            </div>
+        </div>
+        <div class="item @((this.Model.carousel=="3") ? "active" : "")">
             <div class="img-responsive">
                 <p>
                     Let's search for last names starting with B:<br />
                     <code>%Z' UNION SELECT Name, Description FROM dbo.persons WHERE Name like '% B%' --</code><br />
 
                     <br />
-                    Let's display the tables in the database:<br />
-                    <code>%Z' UNION SELECT SCHEMA_NAME(schema_id), name from sys.tables --</code><br />
-
-
-                    <br />
-                    Let's display the content of the account table:<br />
-                    <code>%Z' UNION SELECT '', (SELECT * FROM [dbo].[account] FOR JSON AUTO) --</code><br />
+                    Please notice we searched for Name not for Description.<br />
                 </p>
             </div>
         </div>
-        <div class="item">
+        <div class="item @((this.Model.carousel=="4") ? "active" : "")">
+            <div class="img-responsive">
+                <p>
+
+                    <br />
+                    Let's display the tables in the database:<br />
+                    <code>%Z' UNION SELECT SCHEMA_NAME(schema_id), name from sys.tables --</code><br />
+
+                    <br />
+                    Let's display the content of the account table:<br />
+                    <code>%Z' UNION SELECT * FROM [dbo].[account] --</code><br />
+                    <br />
+                    or <br />
+                    <code>%Z' UNION SELECT 'as json', (SELECT * FROM [dbo].[account] FOR JSON AUTO) --</code><br />
+                    frightening?<br />
+                </p>
+            </div>
+        </div>
+        <div class="item @((this.Model.carousel=="5") ? "active" : "")">
             <div class="img-responsive">
                 <p>
                     Now it's up to you add your name to the persons.<br />
                 </p>
             </div>
         </div>
-        <div class="item">
+        <div class="item @((this.Model.carousel=="6") ? "active" : "")">
             <div class="img-responsive">
                 <p>
                     Now it's up to you add your name to the persons.<br />
@@ -90,9 +115,19 @@
 <div class="row">
     <div class="col-md-6">
         <h2>Search persons</h2>
-        <form method="post">
+        <script>
+            function handleClick() {
+                var $carousel = $($('[data-ride="carousel"]')[0]);
+                var data = $carousel.data('bs.carousel');
+                var active = data.$element.find('.item.active');
+                var found = active.index();
+                $("#carousel").val(found);
+            }
+        </script>
+        <form method="post" onclick="handleClick()">
             Filter for description <input name="filter" type="text" maxlength="255" placeholder="filter for description." />
             <input name="Search" type="submit" />
+            <input name="carousel" id="carousel" type="hidden" />
         </form>
         <h2>The search results:</h2>
         <table border="1">
@@ -119,27 +154,29 @@
         </code>
     </div>
 </div>
-
+<br />
+<br />
+<br />
 <div class="row">
     <div class="col-md-6">
         <h2>This may help you to understand what going on...</h2>
-        </div>
     </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Breakout of strings</h2>
-                <ul>
-                    <li> <code>&apos;%filter%&apos;</code>  is a string in SQL.</li>
-                    <li> <code>&apos;%Z&apos; --filter%&apos;</code></li>
-                    <li> -- is a comment.</li>
-                    <li> in this data no description starts with an Z.</li>
-                </ul>
-            </div>
-            <div class="col-md-6">
-                <h2>append / concat two results</h2>
-                <ul>
-                    <li><code>SELECT .... UNION ALL SELECT ....</code> returns the result of the first select and the second select.</li>
-                    <li><code>SELECT ... (With no results) UNION  SELECT ....</code> returns the result of the the second select, because the first return nothing.</li>
-                </ul>
-            </div>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Breakout of strings</h2>
+        <ul>
+            <li> <code>&apos;%filter%&apos;</code>  is a string in SQL.</li>
+            <li> <code>&apos;%Z&apos; --filter%&apos;</code></li>
+            <li> -- is a comment.</li>
+            <li> in this data no description starts with an Z.</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>append / concat two results</h2>
+        <ul>
+            <li><code>SELECT .... UNION ALL SELECT ....</code> returns the result of the first select and the second select.</li>
+            <li><code>SELECT ... (With no results) UNION  SELECT ....</code> returns the result of the the second select, because the first return nothing.</li>
+        </ul>
+    </div>
+</div>
