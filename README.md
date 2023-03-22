@@ -11,8 +11,7 @@ vs
 
 ```csharp
 filter = $"%{filter}%";
-sqlcode = "SELECT Name, Description FROM dbo.persons WHERE Description like @filter ORDER BY Name;
-";
+sqlcode = "SELECT Name, Description FROM dbo.persons WHERE Description like @filter ORDER BY Name;";
 command.Parameters.Add(new SqlParameter("@filter", filter));
 ```
 
