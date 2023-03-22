@@ -28,8 +28,10 @@ namespace SqlInjectionDemoWebApplication.Pages
 
         private void readPersons() {
             var filter = string.IsNullOrEmpty(this.filter) ? "" : this.filter;
+
             filter = $"%{filter}%";
             this.sqlcode = "SELECT Name, Description FROM dbo.persons WHERE Description like @filter ORDER BY Name;";
+            
             this.persons = new List<Person>();
             try {
                 using (var connection = new SqlConnection(Startup.ConnectionString)) {

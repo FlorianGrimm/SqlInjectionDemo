@@ -9,45 +9,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SqlInjectionDemoWebApplication {
-    public class Startup {
-        public Startup(IConfiguration configuration) {
+namespace SqlInjectionDemoWebApplication
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration {
+        public IConfiguration Configuration
+        {
             get;
         }
         public static string ConnectionString { get; private set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
-            services.Configure<CookiePolicyOptions>(options => {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddRazorPages();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
-            if(env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
-            } else {
-                app.UseExceptionHandler("/Error");
-            }
-
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc();
+            app.UseRouting();
 
-            try {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+            });
+            try
+            {
                 ConnectionString = this.Configuration.GetConnectionString("SQL");
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
             }
         }
     }
