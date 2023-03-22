@@ -18,23 +18,29 @@ command.Parameters.Add(new SqlParameter("@filter", filter));
 # Install
 
 1) Clone the repository
+
 2) Create the database using the file SqlInjectionDemoWebApplication\database.sql. Just open the file in the Microsoft SQL Server Management Studio, and Execute.
 ![Create database](screenshot/CreateDatabase.png)
+
 3) Configure the ConnectionString in the SqlInjectionDemoWebApplication\appsettings.json
+
 4) Start the WebApplication local.
 ```cmd
 cd SqlInjectionDemoWebApplication
 dotnet run 
 ```
 ![dotnet run](screenshot/DotnetRun.png)
+
 5) Open the Browser at http://localhost:5000/
+
 6) foreach page
-    1) read the instructions in the blue area.
-    2) set the filter - Submit to execute the sql
-    3) the results
-    4) the executed sql 
-    5) goto the next page
+  1. read the instructions in the blue area.
+  2. set the filter - Submit to execute the sql
+  3. the results
+  4. the executed sql 
+  5. goto the next page
 ![WebApplication](screenshot/Step.png)
+
 7) Please use SqlParameter. Please do not insert your unverified web request parameter value into dynamic SQL Code anymore.
 
 8) If you really want to use safe dynamic SQL Code, you can use fixed SQL snippets without using dynamic
